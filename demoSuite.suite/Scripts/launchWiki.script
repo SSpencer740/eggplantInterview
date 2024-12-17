@@ -1,0 +1,75 @@
+﻿(****************************************
+This script launches a web browser and loads Wikipedia for a verification
+- see ReadMe for instructions for detailed instructions, github link:
+- use image collections to ensure that images are found on all screen resolutions for each sut
+- this script works both with DAI and as a script-based execution
+
+Common Issues:
+- Images are not captured at the resolution/aspect ratio needed.  For each SUT, add image to collection
+- GUI changes and additional menus are added.  Add a repeat to repeat loop to clear unwanted menus
+
+
+Written by Sam Spencer
+
+****************************)
+params dogType
+// for script based runs, leave the code uncommented below.  For model based runs, comment out the code and pass in param in DAI
+put "schipperke" into dogType
+
+// Launch Broswer and go to wikipedia
+click chromeCollection
+set the SearchRectangle to [0,(RemoteScreenSize().y * 0.25), RemoteScreenSize().x,RemoteScreenSize().y]
+click text:"URL"
+set the SearchRectangle to []
+TypeText "www.wikipedia.org"
+TypeText enterKey
+
+set rptCounter to 0
+Repeat until pageLoaded is true or rptCounter is 4
+	if ImageFound(text:"Free", waitFor:60) then
+		set pageLoaded to true
+		Exit repeat
+	else
+		set pageLoaded to false
+		reloadWiki
+		set rptCounter to rptCounter + 1
+	end if
+End repeat
+
+// verify dog search
+
+TypeText dogType
+typeText enterKey
+if ImageFound(text:"Sold", waitFor:30) then
+	click text:"Sold"
+end if
+
+verifyDog
+
+// exit browser
+click browserXCollection
+
+if ImageFound(desktopCollection) then
+	LogSuccess "Browser Closed"
+else
+	LogWarning "Broswer not closed"
+	CaptureScreen {Name: "browser_not_closed"}
+end if
+
+(***** Handlers ****)
+
+to handle reloadWiki
+	click reloadCollection
+	wait 10
+end reloadWiki
+
+to handle verifyDog dogType
+	if ImageFound(schipperkeCollection) then
+		LogSuccess dogType & "found"
+	else if ImageFound(text:dogType) 
+		LogSuccess dogType & "found"
+	else
+		LogError dogType & "not found"
+		CaptureScreen {Name: dogType &"SearchFailure"}
+	end if
+end verifyDog
