@@ -19,7 +19,9 @@ put "schipperke" into dogType
 // Launch Broswer and go to wikipedia
 doubleclick chromeCollection
 set the SearchRectangle to [0,0, RemoteScreenSize().x, (RemoteScreenSize().y* 0.25)]
-click text:"URL"
+if ImageFound(text:"URL") then
+	click text:"URL"
+end if
 set the SearchRectangle to []
 TypeText "www.wikipedia.org"
 TypeText enterKey
