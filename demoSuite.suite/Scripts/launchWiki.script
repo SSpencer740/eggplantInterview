@@ -1,12 +1,12 @@
 ﻿(****************************************
 This script launches a web browser and loads Wikipedia for a verification
 - see ReadMe for instructions for detailed instructions, github link:
-- use image collections to ensure that images are found on all screen resolutions for each sut
+- use image collections to ensure that images are found on all screen resolutions for each sut used
 - this script works both with DAI and as a script-based execution
 
 Common Issues:
 - Images are not captured at the resolution/aspect ratio needed.  For each SUT, add image to collection
-- GUI changes and additional menus are added.  Add a repeat to repeat loop to clear unwanted menus
+- GUI changes and additional menus are added.  Add a repeat to repeat loop to clear unwanted popups
 
 
 Written by Sam Spencer
@@ -18,7 +18,7 @@ put "schipperke" into dogType
 
 // Launch Broswer and go to wikipedia
 click chromeCollection
-set the SearchRectangle to [0,(RemoteScreenSize().y * 0.25), RemoteScreenSize().x,RemoteScreenSize().y]
+set the SearchRectangle to [0,0, RemoteScreenSize().x, (RemoteScreenSize().y* 0.25)]
 click text:"URL"
 set the SearchRectangle to []
 TypeText "www.wikipedia.org"
@@ -41,7 +41,7 @@ End repeat
 TypeText dogType
 typeText enterKey
 if ImageFound(text:"Sold", waitFor:30) then
-	click text:"Sold"
+	click text:"Close"
 end if
 
 verifyDog
