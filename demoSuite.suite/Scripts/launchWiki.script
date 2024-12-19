@@ -17,7 +17,7 @@ params dogType
 put "schipperke" into dogType
 
 // Launch Broswer and go to wikipedia
-click chromeCollection
+doubleclick chromeCollection
 set the SearchRectangle to [0,0, RemoteScreenSize().x, (RemoteScreenSize().y* 0.25)]
 click text:"URL"
 set the SearchRectangle to []
